@@ -5,6 +5,9 @@
 #include <click/string.hh>
 #include <click/vector.hh>
 struct in_addr;
+#if HAVE_IP6
+struct in6_addr;
+#endif
 CLICK_DECLS
 class ErrorHandler;
 class StringAccum;
@@ -162,7 +165,6 @@ bool cp_time(const String& str, struct timeval* result);
 bool cp_bandwidth(const String& str, uint32_t* result);
 
 // network addresses
-class IPAddress;
 class IPAddressList;
 bool cp_ip_address(const String& str, IPAddress* result  CP_OPT_CONTEXT);
 inline bool cp_ip_address(const String& str, struct in_addr* result  CP_OPT_CONTEXT);
@@ -175,9 +177,8 @@ bool cp_ip_address_list(const String& str, Vector<IPAddress>* result  CP_OPT_CON
 
 #if HAVE_IP6
 class IP6Address;
-struct click_in6_addr;
 bool cp_ip6_address(const String& str, IP6Address* result  CP_OPT_CONTEXT);
-inline bool cp_ip6_address(const String& str, struct click_in6_addr* result  CP_OPT_CONTEXT);
+inline bool cp_ip6_address(const String& str, struct in6_addr* result  CP_OPT_CONTEXT);
 bool cp_ip6_address(const String& str, unsigned char* result  CP_OPT_CONTEXT);
 bool cp_ip6_prefix(const String& str, IP6Address* result_addr, int* result_prefix, bool allow_bare_address  CP_OPT_CONTEXT);
 bool cp_ip6_prefix(const String& str, unsigned char* result_addr, int* result_prefix, bool allow_bare_address  CP_OPT_CONTEXT);
@@ -697,7 +698,7 @@ inline bool cp_ip_address(const String& str, struct in_addr *ina  CP_CONTEXT)
 }
 
 #if HAVE_IP6
-inline bool cp_ip6_address(const String& str, struct click_in6_addr *x  CP_CONTEXT)
+inline bool cp_ip6_address(const String& str, struct in6_addr *x  CP_CONTEXT)
 {
     return cp_ip6_address(str, reinterpret_cast<IP6Address *>(x)  CP_PASS_CONTEXT);
 }
